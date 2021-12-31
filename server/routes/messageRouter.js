@@ -1,11 +1,12 @@
 const { Router } = require("express");
+const { verifyAdmin, verifyUser } = require("../helpers/auth");
 const Message = require("../models/Message");
 
 const messageRouter = Router();
 
 messageRouter
     .route("/:channelId")
-    .get(async (req, res, next) => {
+    .get(verifyUser(), async (req, res, next) => {
         try {
             const messages = await Message.find({
                 channel: req.params.channelId,
@@ -15,7 +16,7 @@ messageRouter
             next(err);
         }
     })
-    .post(async (req, res, next) => {
+    .post(verifyUser(), async (req, res, next) => {
         try {
             const message = await Message.create({
                 ...req.body,
@@ -26,10 +27,10 @@ messageRouter
             next(err);
         }
     })
-    .put(async (req, res, next) => {
+    .put(verifyUser(), async (req, res, next) => {
         next(new Error("This method is not allowed."));
     })
-    .delete(async (req, res, next) => {
+    .delete(verifyUser(), verifyAdmin(), async (req, res, next) => {
         try {
             const result = await Message.deleteMany({});
             res.json(result);
