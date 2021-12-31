@@ -1,3 +1,5 @@
+
+
 {
     "username": "user",
     "password": "password",
@@ -5,3 +7,65 @@
     "lastname": "Doe",
     "email": "jhondoe@email.com"
 }
+
+
+
+{
+    "name": "Welcomeback!",
+    "summary": "This is a test channel.",
+    "created_by": "61cd699162ba211bffa723d5" 
+}
+
+// all users
+{
+    "_id": "61cd699162ba211bffa723d5",
+    "firstname": "Jhon",
+    "lastname": "Doe",
+    "email": "jhondoe@email.com",
+    "avatartUrl": "",
+    "username": "user",
+    "createdAt": "2021-12-30T08:10:57.808Z",
+    "updatedAt": "2021-12-30T08:10:57.808Z",
+    "__v": 0
+  },
+  {
+    "_id": "61cd8c9372f3ad02b5ddbcc2",
+    "firstname": "Shahzaib",
+    "lastname": "Khan",
+    "email": "shahzaib@email.com",
+    "avatartUrl": "",
+    "username": "shahzaib",
+    "createdAt": "2021-12-30T10:40:19.998Z",
+    "updatedAt": "2021-12-30T10:40:19.998Z",
+    "__v": 0
+  },
+  {
+    "_id": "61cd8ca372f3ad02b5ddbcc5",
+    "firstname": "Junaid",
+    "lastname": "Khan",
+    "email": "junaid@email.com",
+    "avatartUrl": "",
+    "username": "junaid",
+    "createdAt": "2021-12-30T10:40:35.528Z",
+    "updatedAt": "2021-12-30T10:40:35.528Z",
+    "__v": 0
+  },
+  {
+    "_id": "61cd8cbc72f3ad02b5ddbcc8",
+    "firstname": "Sakib",
+    "lastname": "Faraz",
+    "email": "sakib@email.com",
+    "avatartUrl": "",
+    "username": "sakib",
+    "createdAt": "2021-12-30T10:41:00.68Z",
+    "updatedAt": "2021-12-30T10:41:00.68Z",
+    "__v": 0
+  }
+
+
+  // simple message
+  {
+    "author": "61cd8cbc72f3ad02b5ddbcc8",
+    "channel": "61cd7b7297dbe579c2598026",
+    "content": "Hello everyone"
+  }

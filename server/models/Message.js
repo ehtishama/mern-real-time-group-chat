@@ -12,6 +12,7 @@ const Message = new Schema(
         channel: {
             type: Types.ObjectId,
             ref: Channel,
+            required: true
         },
         content: {
             type: String,

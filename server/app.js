@@ -8,6 +8,8 @@ const passport = require("./lib/passport");
 const config = require("./config");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/usersRouter");
+const channelRouter = require("./routes/channelRouter");
+const messageRouter = require("./routes/messageRouter");
 
 const app = express();
 mongoose.connect(config.MONGO_URL);
@@ -25,6 +27,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/channels", channelRouter);
+app.use("/messages", messageRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

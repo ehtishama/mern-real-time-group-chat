@@ -14,11 +14,14 @@ const Channel = new Schema(
         created_by: {
             type: Types.ObjectId,
             ref: User,
+            required: true,
         },
         members: [
             {
                 type: Types.ObjectId,
                 ref: User,
+                required: true,
+                unique: true
             },
         ],
     },
