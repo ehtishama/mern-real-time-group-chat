@@ -1,8 +1,9 @@
 const { Router } = require("express");
-const async = require("hbs/lib/async");
 const passport = require("../lib/passport");
 const User = require("../models/User");
 const userRouter = Router();
+const jsonwebtoken = require("jsonwebtoken");
+const config = require("../config");
 
 // get all registered users
 userRouter.route("/").get(async (req, res, next) => {
@@ -20,6 +21,7 @@ userRouter
     .post(passport.authenticate("local"), (req, res, next) => {
         res.json({
             status: "authenticated",
+            token: jsonwebtoken.sign({ _id: req.user._id }, config.JWT_SECRET),
         });
     });
 

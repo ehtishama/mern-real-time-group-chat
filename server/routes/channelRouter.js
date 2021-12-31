@@ -4,6 +4,7 @@ const { Router } = require("express");
 const async = require("hbs/lib/async");
 const Channel = require("../models/Channel");
 const channelRouter = Router();
+const passport = require("passport");
 
 channelRouter
     .route("/")

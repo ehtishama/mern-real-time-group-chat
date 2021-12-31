@@ -11,10 +11,12 @@
         "express": "~4.16.1",
         "hbs": "^4.2.0",
         "http-errors": "~1.6.3",
+        "jsonwebtoken": "^8.5.1",
         "mongodb": "^4.2.2",
         "mongoose": "^6.1.4",
         "morgan": "~1.9.1",
         "passport": "^0.5.2",
+        "passport-jwt": "^4.0.0",
         "passport-local-mongoose": "^6.1.0"
     }
 }
