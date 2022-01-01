@@ -20,8 +20,6 @@ const Channel = new Schema(
             {
                 type: Types.ObjectId,
                 ref: User,
-                required: true,
-                unique: true
             },
         ],
     },

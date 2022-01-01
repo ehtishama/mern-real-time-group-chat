@@ -1,11 +1,17 @@
 const { Router } = require("express");
 const Channel = require("../models/Channel");
-const { verifyAdmin, verifyUser } = require("../helpers/auth");
+const {
+    verifyUser,
+    verifyAdmin,
+    verifyChannelMembership,
+    verifyChannelOwnership,
+} = require("../helpers/auth");
 
 const channelRouter = Router();
 channelRouter
     .route("/")
-    .get(verifyUser(), async (req, res, next) => {
+    .all(verifyUser())
+    .get(async (req, res, next) => {
         try {
             const channels = await Channel.find({});
             res.json(channels);
@@ -16,15 +22,18 @@ channelRouter
     .put((req, res, next) => {
         next(new Error("Method not supported."));
     })
-    .post(verifyUser(), async (req, res, next) => {
+    .post(async (req, res, next) => {
         try {
-            const channel = await Channel.create(req.body);
+            const channel = await Channel.create({
+                ...req.body,
+                created_by: req.user._id,
+            });
             res.json(channel);
         } catch (err) {
             next(err);
         }
     })
-    .delete(verifyUser(), verifyAdmin(), async (req, res, next) => {
+    .delete(verifyAdmin(), async (req, res, next) => {
         try {
             const result = await Channel.deleteMany({});
             res.json(result);
@@ -35,7 +44,8 @@ channelRouter
 
 channelRouter
     .route("/:channelId")
-    .get(verifyUser(), async (req, res, next) => {
+    .all(verifyUser())
+    .get(async (req, res, next) => {
         try {
             const channel = await Channel.findById(
                 req.params.channelId
@@ -48,7 +58,7 @@ channelRouter
     .post(async (req, res, next) => {
         next(new Error("This method is not allowed."));
     })
-    .put(verifyUser(), async (req, res, next) => {
+    .put(verifyChannelOwnership("channelId"), async (req, res, next) => {
         try {
             const updated = await Channel.findByIdAndUpdate(
                 req.params.channelId,
@@ -62,7 +72,7 @@ channelRouter
             next(err);
         }
     })
-    .delete(verifyUser(), verifyAdmin(), async (req, res, next) => {
+    .delete(verifyChannelOwnership("channelId"), async (req, res, next) => {
         try {
             const result = await Channel.findByIdAndDelete(
                 req.params.channelId
@@ -75,7 +85,8 @@ channelRouter
 
 channelRouter
     .route("/:channelId/members")
-    .get(verifyUser(), async (req, res, next) => {
+    .all(verifyUser())
+    .get(verifyChannelMembership("channelId"), async (req, res, next) => {
         try {
             const channel = await Channel.findById(
                 req.params.channelId
@@ -85,10 +96,10 @@ channelRouter
             next(err);
         }
     })
-    .post(verifyUser(), async (req, res, next) => {
+    .post(async (req, res, next) => {
         try {
             const channel = await Channel.findById(req.params.channelId);
-            const member = req.body._id;
+            const member = req.user._id;
             channel.members.addToSet(member);
             const updatedChannel = await channel.save();
             res.json(updatedChannel.members);
@@ -99,7 +110,7 @@ channelRouter
     .put(async (req, res, next) => {
         next(new Error("This method is not supported."));
     })
-    .delete(verifyUser(), verifyAdmin(), async (req, res, next) => {
+    .delete(verifyAdmin(), async (req, res, next) => {
         try {
             const channel = await Channel.findByIdAndUpdate(
                 req.params.channelId,
@@ -131,6 +142,7 @@ channelRouter
             next(err);
         }
     })
+    // TODO:: verifySelf i.e. memberId === req.user._id
     .delete(verifyUser(), verifyAdmin(), async (req, res, next) => {
         try {
             const updated = await Channel.findByIdAndUpdate(
@@ -150,4 +162,5 @@ channelRouter
             next(err);
         }
     });
+
 module.exports = channelRouter;
