@@ -20,7 +20,9 @@ userRouter
     .route("/login")
     .post(passport.authenticate("local"), (req, res, next) => {
         res.json({
-            status: "authenticated",
+            username: req.user.username,
+            firstname: req.user.firstname,
+            lastname: req.user.lastname,
             token: jsonwebtoken.sign({ _id: req.user._id }, config.JWT_SECRET),
         });
     });
