@@ -6,6 +6,7 @@ export default function Home(props) {
         <div class="flex">
             <Sidebar />
             <MessagePanel />
+            
         </div>
     );
 }

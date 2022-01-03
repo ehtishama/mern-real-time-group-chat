@@ -4,21 +4,28 @@ import SearchIcon from "../../icons/search";
 import UserIcon from "../../icons/user";
 import Channel from "./channel";
 import ChevronDown from "./chevron-down";
+import Modal from "./modal";
+import {useState} from "react";
 
 export default function Sidebar() {
+    const [modalOpen, setModalOpen] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
+
     return (
         <div className="shrink-0 text-gray-50 h-screen w-72 bg-dark-100 space-y-4 flex flex-col">
             {/* heading */}
             <div className="flex justify-between items-center h-12 shadow shadow-black px-8">
                 <h2 className="font-semibold">Channels</h2>
-                <button className="h-6 w-6 rounded bg-dark-200 hover:bg-dark-hover flex items-center justify-center font-bold">
-                    <PlusIcon />
+                <button
+                    className="h-6 w-6 rounded bg-dark-200 hover:bg-dark-hover flex items-center justify-center font-bold"
+                    onClick={() => setModalOpen(old => !old)}>
+                    <PlusIcon/>
                 </button>
             </div>
             {/* search */}
             <div className="px-8 space-y-8">
                 <div className="relative">
-                    <SearchIcon className="absolute top-2 left-2" />
+                    <SearchIcon className="absolute top-2 left-2"/>
                     <input
                         type="text"
                         placeholder="Search"
@@ -27,11 +34,11 @@ export default function Sidebar() {
                 </div>
             </div>
             {/* list of channels */}
-            <Channel className={"px-8 py-2"} />
+            <Channel className={"px-8 py-2"}/>
 
             {/* profile */}
             <div
-                style={{ marginTop: "auto" }}
+                style={{marginTop: "auto"}}
                 className="bg-dark-50 py-3 px-4 flex items-center gap-3 relative cursor-pointer hover:bg-dark-hover"
             >
                 <div className="rounded-md shadow overflow-hidden">
@@ -44,27 +51,35 @@ export default function Sidebar() {
 
                 <p className="font-medium select-none">Xanthe Neal</p>
 
-                <ChevronDown className={"ml-auto"} />
+                <button onClick={() => setShowPopup(!showPopup)} className={"ml-auto rounded hover:bg-dark-200"}>
+                    <ChevronDown/>
+                </button>
 
                 {/* popup */}
-                <div className="absolute bottom-14 right-2 p-3 rounded-md border border-neutral-600 bg-dark-200 w-44">
+                <div
+                    className={`${showPopup ? 'bottom-14' : 'invisible bottom-0'} absolute right-2 p-3 rounded-md border border-neutral-600 bg-dark-200 w-44 transition`}>
                     <ul>
                         <li className="cursor-pointer hover:bg-dark-hover select-none rounded-md">
                             <div className="flex items-center gap-2 p-2 ">
-                                <UserIcon />
+                                <UserIcon/>
                                 <span className="text">My Profile</span>
                             </div>
                         </li>
-                        <div className="h-0.5 bg-gray-500 my-4 mx-2"></div>
+                        <div className="h-0.5 bg-gray-500 my-4 mx-2"/>
                         <li>
                             <div className="flex items-center gap-2 px-2 py-1 text-red-400">
-                                <LogoutIcon />
-                                <span className="text-sm font-medium">Logout</span>
+                                <LogoutIcon/>
+                                <span className="text-sm font-medium">
+                                    Logout
+                                </span>
                             </div>
                         </li>
                     </ul>
                 </div>
             </div>
+
+            {/* modal - make sure parent is not relative */}
+            <Modal open={modalOpen} setOpen={setModalOpen}/>
         </div>
     );
 }
