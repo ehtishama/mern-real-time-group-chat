@@ -1,40 +1,23 @@
 import LogoutIcon from "../../icons/logout";
-import PlusIcon from "../../icons/plus";
-import SearchIcon from "../../icons/search";
 import UserIcon from "../../icons/user";
-import Channel from "./channel";
 import ChevronDown from "./chevron-down";
 import Modal from "./modal";
 import {useState} from "react";
+import {AllChannels} from "./all-channels";
+import SelectedChannel from "./selected-channel";
 
 export default function Sidebar() {
     const [modalOpen, setModalOpen] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
+    const [showAllChannels, setShowAllChannels] = useState(true);
 
     return (
         <div className="shrink-0 text-gray-50 h-screen w-72 bg-dark-100 space-y-4 flex flex-col">
-            {/* heading */}
-            <div className="flex justify-between items-center h-12 shadow shadow-black px-8">
-                <h2 className="font-semibold">Channels</h2>
-                <button
-                    className="h-6 w-6 rounded bg-dark-200 hover:bg-dark-hover flex items-center justify-center font-bold"
-                    onClick={() => setModalOpen(old => !old)}>
-                    <PlusIcon/>
-                </button>
-            </div>
-            {/* search */}
-            <div className="px-8 space-y-8">
-                <div className="relative">
-                    <SearchIcon className="absolute top-2 left-2"/>
-                    <input
-                        type="text"
-                        placeholder="Search"
-                        className="bg-dark-input text-sm w-full rounded-md p-2 pl-8 placeholder:text-gray-200"
-                    />
-                </div>
-            </div>
-            {/* list of channels */}
-            <Channel className={"px-8 py-2"}/>
+            {showAllChannels ?
+                <AllChannels handleCreateBtnClick={() => setModalOpen(old => !old)}
+                             onChannelClick={() => setShowAllChannels(false)}/> :
+                <SelectedChannel onBackClick={() => setShowAllChannels(true)}/>
+            }
 
             {/* profile */}
             <div
