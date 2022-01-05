@@ -20,6 +20,7 @@ messageRouter
         try {
             const message = await Message.create({
                 ...req.body,
+                author: req.user._id,
                 channel: req.params.channelId,
             });
             res.json(message);

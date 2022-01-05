@@ -4,6 +4,6 @@ import { useUser } from "../hooks/useUser";
 
 export default function RequireUnauth({ e }) {
     const { user } = useUser();
-    if (user) return <Navigate to={ROUTES.HOME} />;
+    if (user) return <Navigate to={ROUTES.CHANNELS} />;
     else return e;
 }

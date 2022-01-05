@@ -1,5 +1,6 @@
 const ROUTES = {
-    HOME: "/",
+    CHANNELS: "channels",
+    CHANNEL: ":channelId",
     LOGIN: "/login",
     LOGOUT: "/logout",
 };

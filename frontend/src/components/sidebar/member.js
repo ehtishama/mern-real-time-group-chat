@@ -1,14 +1,14 @@
-export default function Member({className}) {
+export default function Member({className, member}) {
     return (
         <div
-            class={`flex gap-2 items-center cursor-pointer select-none hover:bg-dark-hover ${className}`}
+            className={`flex gap-4 mb-1 items-center cursor-pointer select-none hover:bg-dark-hover ${className}`}
         >
             <div className="h-8 w-8 rounded bg-dark-200 flex items-center justify-center">
                 <img src={"https://randomuser.me/api/portraits/women/90.jpg"}
                      className="h-8 w-8 rounded" alt={"User profile"}/>
             </div>
 
-            <h2 className="text-gray-400 font-medium text-sm">Annalise Huynh</h2>
+            <h2 className="text-gray-400 font-medium text-sm capitalize">{`${member.firstname} ${member.lastname}`}</h2>
         </div>
     );
 }
