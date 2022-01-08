@@ -2,10 +2,12 @@ import ArrowBack from "../../icons/arrow-back";
 import Member from "./member";
 import { useNavigate } from "react-router-dom";
 
+
 export default function SelectedChannel({ channel, members }) {
     const padding = 6;
     const navigate = useNavigate();
 
+    if (!channel) return null;
     return (
         <>
             {/* heading */}
@@ -23,12 +25,8 @@ export default function SelectedChannel({ channel, members }) {
             {/* Selected channel info */}
             <div className={`px-${padding} space-y-8`}>
                 <div className="space-y-2">
-                    <h2 className={"font-medium uppercase"}>
-                        {channel.name}
-                    </h2>
-                    <p className={"text-sm text-gray-400"}>
-                        {channel.summary}
-                    </p>
+                    <h2 className={"font-medium uppercase"}>{channel.name}</h2>
+                    <p className={"text-sm text-gray-400"}>{channel.summary}</p>
                 </div>
             </div>
 

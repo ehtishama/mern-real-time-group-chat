@@ -25,7 +25,9 @@ function verifyChannelMembership(paramsKey) {
                 members: req.user._id,
             });
             if (channel) return next();
-            return next(new Error("You're not a member of this channel"));
+            const error = new Error("You're not a member of this channel");
+            error.status = 403;
+            return next(error);
         } catch (err) {
             next(err);
         }

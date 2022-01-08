@@ -8,9 +8,11 @@ import SelectedChannel from "./selected-channel";
 import { useUser } from "../../hooks/useUser";
 import { getMembers } from "../../services/api";
 import { useParams } from "react-router-dom";
+import { useApiErrors } from "../../contexts/apiErrorContext";
 
 export default function Sidebar({ channels, channel }) {
     const { channelId } = useParams();
+    const { errors, setErrors } = useApiErrors();
 
     // UI state
     const [modalOpen, setModalOpen] = useState(false);
@@ -25,7 +27,15 @@ export default function Sidebar({ channels, channel }) {
     // members effect
     useEffect(() => {
         if (!channelId) return;
-        getMembers(channelId).then(setMembers).catch(console.log);
+        getMembers(channelId)
+            .then(setMembers)
+            .catch((err) => {
+                // console.log("err object", err.response.data);
+                // err.response = {data: response from server, status: 403, statusText: Forbidden, headers: {}}
+
+                err.key = Date.now();
+                setErrors([...errors, err]);
+            });
         return () => setMembers([]);
     }, [channelId]);
 

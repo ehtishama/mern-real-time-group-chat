@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap');
 
 input {
   @apply block w-full rounded-md px-4 py-3 my-4 bg-dark-input outline-none focus:outline-gray-600 outline-1;

@@ -6,12 +6,15 @@ import RequireAuth from "./components/require-auth";
 import ROUTES from "./constants/routes";
 import RequireUnauth from "./components/require-unauth";
 import Logout from "./components/logout";
-import { useEffect } from "react";
 import { api } from "./lib/axios";
 import { useUser } from "./hooks/useUser";
+import { ApiErrorHolder } from "./components/api-error-holder";
+import { useNetworkStatus } from "./contexts/networkStatusContext";
+import NetworkStatus from "./components/network-status";
 
 function App() {
     const { user } = useUser();
+
     if (user && user.token) {
         api.interceptors.request.use((config) => {
             config.headers = {
@@ -41,6 +44,8 @@ function App() {
                 />
                 <Route path={ROUTES.LOGOUT} element={<Logout />} />
             </Routes>
+            <ApiErrorHolder />
+            <NetworkStatus />
         </BrowserRouter>
     );
 }

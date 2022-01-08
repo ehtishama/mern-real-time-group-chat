@@ -3,9 +3,11 @@ import { useParams } from "react-router-dom";
 import MessagePanel from "../components/message-panel";
 import Sidebar from "../components/sidebar";
 import { getChannels } from "../services/api";
+import { useApiErrors } from "../contexts/apiErrorContext";
 
 export default function Home() {
     const { channelId } = useParams();
+    const { setErrors } = useApiErrors();
 
     const [allChannels, setAllChannels] = useState([]);
     const [selectedChannel, setSelectedChannel] = useState(null);

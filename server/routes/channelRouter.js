@@ -86,7 +86,7 @@ channelRouter
 channelRouter
     .route("/:channelId/members")
     .all(verifyUser())
-    .get(async (req, res, next) => {
+    .get(verifyChannelMembership("channelId"), async (req, res, next) => {
         try {
             const channel = await Channel.findById(
                 req.params.channelId

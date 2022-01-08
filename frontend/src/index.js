@@ -1,15 +1,20 @@
+import "./index.css";
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { UserProvider } from "./contexts/userContext";
-
+import { ApiErrorProvider } from "./contexts/apiErrorContext";
+import { NetworkStatusProvider } from "./contexts/networkStatusContext";
 ReactDOM.render(
     <React.StrictMode>
-        <UserProvider>
-            <App />
-        </UserProvider>
+        <NetworkStatusProvider>
+            <ApiErrorProvider>
+                <UserProvider>
+                    <App />
+                </UserProvider>
+            </ApiErrorProvider>
+        </NetworkStatusProvider>
     </React.StrictMode>,
     document.getElementById("root")
 );
