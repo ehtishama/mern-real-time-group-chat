@@ -27,6 +27,7 @@ export default function SelectedChannel({ channel, members }) {
                 <div className="space-y-2">
                     <h2 className={"font-medium uppercase"}>{channel.name}</h2>
                     <p className={"text-sm text-gray-400"}>{channel.summary}</p>
+                    {/* <p>{ channel._id }</p> */}
                 </div>
             </div>
 

@@ -21,3 +21,15 @@ export async function postMessage(channelId, content) {
     });
     return message;
 }
+
+export async function joinChannel(channelId, user) {
+    if (!user) throw new Error("You are not authenticated.");
+
+    const { data: members } = await api.post(`/channels/${channelId}/members`);
+    return members;
+}
+
+export async function createNewChannel(newChannel) {
+    const { data: channel } = await api.post("/channels", newChannel);
+    return channel;
+}

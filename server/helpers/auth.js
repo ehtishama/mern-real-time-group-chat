@@ -25,11 +25,12 @@ function verifyChannelMembership(paramsKey) {
                 members: req.user._id,
             });
             if (channel) return next();
-            const error = new Error("You're not a member of this channel");
+            const error = new Error("You're not a member of this channel", {cause: "abc"});
             error.status = 403;
+
             return next(error);
         } catch (err) {
-            next(err);
+            return next(err);
         }
     };
 }

@@ -11,6 +11,7 @@ import { useUser } from "./hooks/useUser";
 import { ApiErrorHolder } from "./components/api-error-holder";
 import { useNetworkStatus } from "./contexts/networkStatusContext";
 import NetworkStatus from "./components/network-status";
+import Signup from "./pages/signup";
 
 function App() {
     const { user } = useUser();
@@ -41,6 +42,10 @@ function App() {
                 <Route
                     path={ROUTES.LOGIN}
                     element={<RequireUnauth e={<Login />} />}
+                />
+                <Route
+                    path={ROUTES.SIGNUP}
+                    element={<RequireUnauth e={<Signup />} />}
                 />
                 <Route path={ROUTES.LOGOUT} element={<Logout />} />
             </Routes>

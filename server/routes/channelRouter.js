@@ -27,6 +27,7 @@ channelRouter
             const channel = await Channel.create({
                 ...req.body,
                 created_by: req.user._id,
+                members: [req.user._id]
             });
             res.json(channel);
         } catch (err) {

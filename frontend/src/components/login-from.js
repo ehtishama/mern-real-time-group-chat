@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import ROUTES from "../constants/routes";
 import { useUser } from "../hooks/useUser";
 import { attempLogin } from "../services/auth";
 
-export default function LoginForm({ params }) {
+export default function LoginForm() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loginError, setLoginError] = useState(false);
@@ -69,6 +71,14 @@ export default function LoginForm({ params }) {
                         Login{loading && "..."}
                     </button>
                 </form>
+
+                <p className="text-sm mt-3 flex gap-1 justify-end">
+                    Don't have an account?
+                    <Link to={ROUTES.SIGNUP}>
+                        <span className="text-blue-400 font-medium underline underline-offset-1">Register</span>
+
+                    </Link>
+                </p>
             </div>
         </div>
     );
