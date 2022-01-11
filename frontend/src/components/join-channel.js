@@ -1,12 +1,13 @@
 import { useUser } from "../hooks/useUser";
 import { joinChannel } from "../services/api";
 
-export default function JoinChannel({ channel, setIsMember }) {
+export default function JoinChannel({ channel, setIsMember, addNewMember }) {
     const { user } = useUser();
     const handleJoinChannelClick = async () => {
         try {
             await joinChannel(channel._id, user);
             setIsMember(true);
+            addNewMember(channel._id, user._id);
         } catch (e) {
             console.log(e);
         }

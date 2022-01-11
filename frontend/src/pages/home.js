@@ -7,8 +7,8 @@ import { getChannels } from "../services/api";
 
 export default function Home() {
     const { channelId } = useParams();
-
     const { user } = useUser();
+
     const [allChannels, setAllChannels] = useState([]);
     const [selectedChannel, setSelectedChannel] = useState(null);
     const [isMemberOfSelectedChannel, setIsMemberOfSelectedChannel] =
@@ -16,6 +16,23 @@ export default function Home() {
 
     const addNewChannel = (newChannel) => {
         setAllChannels([...allChannels, newChannel]);
+    };
+
+    const addNewMember = (channelId, memberId) => {
+        const channel = allChannels.find(
+            (channel) => channel._id === channelId
+        );
+        if (!channel) return;
+        channel.members.push(memberId);
+        const otherChannels = allChannels.filter(
+            (channel) => channel._id !== channelId
+        );
+
+        setAllChannels(
+            [...otherChannels, channel].sort(
+                (a, b) => a.createdAt > b.createdAt
+            )
+        );
     };
 
     // channels effect
@@ -63,6 +80,7 @@ export default function Home() {
                 channel={selectedChannel}
                 isMember={isMemberOfSelectedChannel}
                 setIsMember={setIsMemberOfSelectedChannel}
+                addNewMember={addNewMember}
             />
         </div>
     );

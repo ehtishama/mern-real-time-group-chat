@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { getMessages, postMessage } from "../../services/api";
+import InfiniteProgress from "../infinite-progress";
 import JoinChannel from "../join-channel";
-import Message from "./message";
+import AllMessages from "./all-messages";
 import NewMessageForm from "./new-message-form";
 
-export default function MessagePanel({ channel, isMember, setIsMember }) {
+export default function MessagePanel({ channel, isMember, setIsMember, addNewMember }) {
     const channelId = channel?._id;
 
     const [messages, setMessages] = useState([]);
+    const [loadingMessages, setLoadingMessages] = useState(false);
 
     const addNewMessage = (message) => {
         setMessages([...messages, message]);
@@ -18,7 +20,20 @@ export default function MessagePanel({ channel, isMember, setIsMember }) {
 
     useEffect(() => {
         if (!channelId || !isMember) return;
-        getMessages(channelId).then(setMessages).catch(console.log);
+        setLoadingMessages(true);
+        getMessages(channelId)
+            .then(
+                (resp) =>
+                    new Promise((resolve) =>
+                        setTimeout(() => resolve(resp), 2000)
+                    )
+            )
+            .then((messages) => {
+                setMessages(messages);
+                setLoadingMessages(false);
+            })
+            .catch(console.log);
+        return () => setMessages([]);
     }, [channelId, isMember]);
 
     return (
@@ -31,20 +46,23 @@ export default function MessagePanel({ channel, isMember, setIsMember }) {
                 <div className="overflow-auto" style={{ flexGrow: 1 }}>
                     {isMember === undefined ? null : isMember === false ? (
                         <div className="w-full">
-                            <JoinChannel channel={channel} setIsMember={setIsMember} />
+                            <JoinChannel
+                                channel={channel}
+                                setIsMember={setIsMember}
+                                addNewMember={addNewMember}
+                            />
                         </div>
                     ) : (
                         <div>
-                            {/* messages */}
-                            {messages.map((message) => {
-                                return (
-                                    <Message
-                                        key={message._id}
-                                        message={message}
-                                        className={"px-12"}
+                            {loadingMessages ? (
+                                <div className="my-10 flex justify-center">
+                                    <InfiniteProgress
+                                        className={"text-blue-400"}
                                     />
-                                );
-                            })}
+                                </div>
+                            ) : (
+                                <AllMessages messages={messages} />
+                            )}
                         </div>
                     )}
                 </div>

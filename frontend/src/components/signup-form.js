@@ -9,23 +9,21 @@ export default function SignupForm() {
     const { errors, setErrors } = useApiErrors();
     const navigate = useNavigate();
 
-    const handleSignup = (user) => {
-        createNewUser(user)
-            .then((resp) => {
-                const { data: user } = resp;
-                storeUser(user);
-                navigate(ROUTES.CHANNELS);
-            })
-            .catch((error) => {
-                const key = Date.now();
-                const {
-                    response: {
-                        data: { name, message, status },
-                    },
-                } = error;
+    const handleSignup = async (values) => {
+        try {
+            await new Promise((res) => setTimeout(res, 2000));
+            const { data: user } = await createNewUser(values);
+            storeUser(user);
+            navigate(ROUTES.CHANNELS);
+        } catch (error) {
+            const {
+                response: {
+                    data: { name, message, status },
+                },
+            } = error;
 
-                setErrors([...errors, { name, message, key, status }]);
-            });
+            setErrors([...errors, { key: Date.now(), name, message, status }]);
+        }
     };
 
     return (
@@ -44,10 +42,19 @@ export default function SignupForm() {
                     }}
                     onSubmit={handleSignup}
                 >
-                    {({ values, handleChange, handleSubmit }) => {
+                    {({
+                        values,
+                        handleChange,
+                        handleSubmit,
+                        isSubmitting,
+                        errors,
+                    }) => {
                         return (
                             <form onSubmit={handleSubmit}>
                                 <div className="gap-1">
+                                    <p className="text-red-500 text-center">
+                                        {errors.error}
+                                    </p>
                                     <input
                                         type="text"
                                         name="firstname"
@@ -114,6 +121,7 @@ export default function SignupForm() {
                                 <button
                                     type="submit"
                                     className="btn btn-primary w-full"
+                                    disabled={isSubmitting}
                                 >
                                     Register
                                 </button>
