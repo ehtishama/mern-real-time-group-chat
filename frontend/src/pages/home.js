@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import MessagePanel from "../components/message-panel";
 import Sidebar from "../components/sidebar";
 import { useUser } from "../hooks/useUser";
+import { socket } from "../lib/socket";
 import { getChannels } from "../services/api";
 
 export default function Home() {
@@ -14,11 +15,11 @@ export default function Home() {
     const [isMemberOfSelectedChannel, setIsMemberOfSelectedChannel] =
         useState(undefined);
 
-    const addNewChannel = (newChannel) => {
+    function addNewChannel(newChannel) {
         setAllChannels([...allChannels, newChannel]);
-    };
+    }
 
-    const addNewMember = (channelId, memberId) => {
+    function addNewMember(channelId, memberId) {
         const channel = allChannels.find(
             (channel) => channel._id === channelId
         );
@@ -33,32 +34,45 @@ export default function Home() {
                 (a, b) => a.createdAt > b.createdAt
             )
         );
-    };
+    }
 
-    // channels effect
+    // fetch all channels, only once
     useEffect(() => {
         getChannels()
             .then((channels) => setAllChannels(channels))
             .catch((err) => console.log(err));
     }, []);
 
-    // change current channel
+    // change selected channel, when channelId changes
     useEffect(() => {
         if (!channelId) return;
 
-        setSelectedChannel(
-            allChannels.find((channel) => channel._id === channelId)
+        const selectedChannel = allChannels.find(
+            (channel) => channel._id === channelId
         );
+        setSelectedChannel(selectedChannel);
 
         return () => {
             setSelectedChannel(null);
         };
     }, [channelId, allChannels]);
 
-    //
+    // connect to socket server, every time when channel changes
+    useEffect(() => {
+        if (!selectedChannel || !channelId) return;
+
+        // connect to web sockets
+        socket.auth = { user: user._id, channel: channelId };
+        socket.connect();
+
+        return () => {
+            socket.disconnect();
+        };
+    }, [selectedChannel, channelId, user._id]);
+
+    // see if the current user is a member of selected channel, run whenever selectedChannelChanges
     useEffect(() => {
         if (!selectedChannel) return;
-
         if (selectedChannel.members.includes(user._id))
             setIsMemberOfSelectedChannel(true);
         else setIsMemberOfSelectedChannel(false);

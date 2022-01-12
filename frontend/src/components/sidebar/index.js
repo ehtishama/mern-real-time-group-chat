@@ -7,9 +7,14 @@ import { useParams } from "react-router-dom";
 import { useApiErrors } from "../../contexts/apiErrorContext";
 import Profile from "./profile";
 
-export default function Sidebar({ channels, channel, isMember, addNewChannel }) {
+export default function Sidebar({
+    channels,
+    channel,
+    isMember,
+    addNewChannel,
+}) {
     const { channelId } = useParams();
-    const { errors, setErrors } = useApiErrors();
+    const { setErrors } = useApiErrors();
 
     // UI state
     const [modalOpen, setModalOpen] = useState(false);
@@ -17,14 +22,13 @@ export default function Sidebar({ channels, channel, isMember, addNewChannel }) 
     // content state
     const [members, setMembers] = useState([]);
 
-    // members effect
+    // fetch member of selected channel
     useEffect(() => {
         if (!channelId || !isMember) return;
 
         getMembers(channelId)
             .then(setMembers)
             .catch((err) => {
-                // err.response = {data: response from server, status: 403, statusText: Forbidden, headers: {}}
                 const {
                     response: {
                         data: { message, status },
@@ -32,10 +36,10 @@ export default function Sidebar({ channels, channel, isMember, addNewChannel }) 
                 } = err;
 
                 const key = Date.now();
-                setErrors([...errors, { key, message, status }]);
+                setErrors((errors) => [...errors, { key, message, status }]);
             });
         return () => setMembers([]);
-    }, [channelId, isMember]);
+    }, [channelId, isMember, setErrors]);
 
     return (
         <div className="shrink-0 text-gray-50 h-screen w-72 bg-dark-100 space-y-4 flex flex-col">
@@ -52,7 +56,11 @@ export default function Sidebar({ channels, channel, isMember, addNewChannel }) 
             <Profile />
 
             {/* modal - make sure parent is not relative */}
-            <Modal open={modalOpen} setOpen={setModalOpen} addNewChannel={addNewChannel} />
+            <Modal
+                open={modalOpen}
+                setOpen={setModalOpen}
+                addNewChannel={addNewChannel}
+            />
         </div>
     );
 }

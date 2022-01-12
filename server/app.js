@@ -11,14 +11,20 @@ const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/usersRouter");
 const channelRouter = require("./routes/channelRouter");
 const messageRouter = require("./routes/messageRouter");
+const { socketServer } = require("./bin/socket-server");
 
 const app = express();
+
+// socket server
+app.io = socketServer;
+
 mongoose.connect(config.MONGO_URL);
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
 
+// middlewares
 app.use(passport.initialize());
 app.use(logger("dev"));
 app.use(express.json());
@@ -27,6 +33,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 
+// routes
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/channels", channelRouter);
@@ -44,7 +51,11 @@ app.use(function (err, req, res, next) {
     // res.locals.error = req.app.get("env") === "development" ? err : {};
 
     // render the error page
-    res.status(err.status || 500).json({ ...err, message: err.message, name: err.name });
+    res.status(err.status || 500).json({
+        ...err,
+        message: err.message,
+        name: err.name,
+    });
     // res.render("error");
 });
 

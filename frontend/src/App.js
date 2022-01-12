@@ -35,7 +35,7 @@ function App() {
                 >
                     <Route
                         path={ROUTES.CHANNEL}
-                        e={<RequireAuth e={<Home />} />}
+                        element={<RequireAuth e={<Home />} />}
                     />
                 </Route>
 

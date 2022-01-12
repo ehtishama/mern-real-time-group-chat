@@ -1,22 +1,51 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useUser } from "../../hooks/useUser";
+import { socket } from "../../lib/socket";
 import { getMessages, postMessage } from "../../services/api";
 import InfiniteProgress from "../infinite-progress";
 import JoinChannel from "../join-channel";
 import AllMessages from "./all-messages";
 import NewMessageForm from "./new-message-form";
 
-export default function MessagePanel({ channel, isMember, setIsMember, addNewMember }) {
+export default function MessagePanel({
+    channel,
+    isMember,
+    setIsMember,
+    addNewMember,
+}) {
+    const { user } = useUser();
     const channelId = channel?._id;
 
     const [messages, setMessages] = useState([]);
     const [loadingMessages, setLoadingMessages] = useState(false);
 
-    const addNewMessage = (message) => {
+    const emptyDiv = useRef();
+
+    async function addNewMessage(message) {
         setMessages([...messages, message]);
-        postMessage(channelId, message.content)
-            .then(console.log)
-            .catch(console.log);
-    };
+        try {
+            await postMessage(channelId, message.content);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    function scrollToBottom() {
+        emptyDiv.current?.scrollIntoView({ behavior: "smooth" });
+    }
+
+    useEffect(() => {
+        socket.on("new_message", (payload) => {
+            if (
+                payload &&
+                payload.channel === channelId &&
+                payload.author._id !== user._id
+            ) {
+                setMessages((messages) => [...messages, payload]);
+            }
+        });
+
+        return () => socket.removeListener("new_message");
+    }, [channelId, user._id]);
 
     useEffect(() => {
         if (!channelId || !isMember) return;
@@ -35,6 +64,10 @@ export default function MessagePanel({ channel, isMember, setIsMember, addNewMem
             .catch(console.log);
         return () => setMessages([]);
     }, [channelId, isMember]);
+
+    useEffect(() => {
+        scrollToBottom();
+    });
 
     return (
         <div className="text-gray-200 h-screen bg-dark-200 w-full">
@@ -63,6 +96,7 @@ export default function MessagePanel({ channel, isMember, setIsMember, addNewMem
                             ) : (
                                 <AllMessages messages={messages} />
                             )}
+                            <div ref={emptyDiv} />
                         </div>
                     )}
                 </div>

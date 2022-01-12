@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const { socketServer, store } = require("../bin/socket-server");
 const { verifyAdmin, verifyUser } = require("../helpers/auth");
 const Message = require("../models/Message");
 
@@ -18,13 +19,30 @@ messageRouter
     })
     .post(verifyUser(), async (req, res, next) => {
         try {
+            const channelId = req.params.channelId;
             const message = await Message.create({
                 ...req.body,
                 author: req.user._id,
-                channel: req.params.channelId,
+                channel: channelId,
             });
+
+            const savedMessage = await Message.findById(message._id).populate(
+                "author"
+            );
+            socketServer.to(channelId).emit("new_message", savedMessage);
+            console.log("emitting to channel: ", channelId)
+            // emit on connected sockets
+            // if (store.has(req.params.channelId)) {
+            //     // receivers
+            //     const receivers = store.get(req.params.channelId);
+            //     receivers.forEach((receiver) => {
+            //         socketServer.emit("new_message", savedMessage);
+            //     });
+            // }
+
             res.json(message);
         } catch (err) {
+            console.log(err);
             next(err);
         }
     })
