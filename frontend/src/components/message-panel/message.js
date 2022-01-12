@@ -1,9 +1,11 @@
+import { generateAvatar } from "../../helpers/profile";
+
 export default function Message({ className, message }) {
     return (
         <div className={`flex gap-6 py-4 ${className}`}>
             <div className="w-8 h-8 shrink-0 rounded shadow overflow-hidden">
                 <img
-                    src="https://randomuser.me/api/portraits/men/85.jpg"
+                    src={generateAvatar(message.author.username)}
                     alt="Profile"
                 />
             </div>
@@ -14,9 +16,7 @@ export default function Message({ className, message }) {
                     <p className="text-xs">yesterday at 14:02</p>
                 </div>
 
-                <p className="text-sm">
-                    {message.content}
-                </p>
+                <p className="text-sm">{message.content}</p>
             </div>
         </div>
     );

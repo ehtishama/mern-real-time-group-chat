@@ -25,6 +25,7 @@ userRouter
             firstname: req.user.firstname,
             lastname: req.user.lastname,
             username: req.user.username,
+            avatarUrl: req.user.avatartUrl,
             token: jsonwebtoken.sign({ _id: req.user._id }, config.JWT_SECRET),
         });
     });
@@ -32,10 +33,8 @@ userRouter
 // create new user
 userRouter.route("/signup").post(async (req, res, next) => {
     try {
-        const { _id, firstname, lastname, username, email } = await User.register(
-            { ...req.body },
-            req.body.password
-        );
+        const { _id, firstname, lastname, username, email } =
+            await User.register({ ...req.body }, req.body.password);
 
         const channel = await Channel.findById("61cd7b7297dbe579c2598026"); // welcome channel
         const member = _id;

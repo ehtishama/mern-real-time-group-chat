@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import ROUTES from "../../constants/routes";
+import { generateAvatar } from "../../helpers/profile";
 import { useUser } from "../../hooks/useUser";
 import LogoutIcon from "../../icons/logout";
 import UserIcon from "../../icons/user";
@@ -17,7 +18,7 @@ export default function Profile() {
         >
             <div className="rounded-md shadow overflow-hidden">
                 <img
-                    src="https://randomuser.me/api/portraits/men/47.jpg"
+                    src={generateAvatar(user.username)}
                     alt="Profile"
                     className="h-10 w-10"
                 />

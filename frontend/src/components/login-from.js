@@ -71,7 +71,8 @@ export default function LoginForm() {
                                     "border border-red-800 shadow shadow-red-800"
                                 }`}
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    autoComplete="current-password"
                                 required
                             />
                             {loginError && (
