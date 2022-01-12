@@ -94,9 +94,11 @@ export default function MessagePanel({
                                     />
                                 </div>
                             ) : (
-                                <AllMessages messages={messages} />
+                                <>
+                                    <AllMessages messages={messages} />
+                                    <div ref={emptyDiv} />
+                                </>
                             )}
-                            <div ref={emptyDiv} />
                         </div>
                     )}
                 </div>

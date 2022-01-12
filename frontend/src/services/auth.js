@@ -1,6 +1,7 @@
+import { BASE_URL } from "../constants/api";
 import { api } from "../lib/axios";
 export function attempLogin(username, password) {
-    return fetch("http://localhost:3000/users/login", {
+    return fetch(BASE_URL + "/users/login", {
         method: "POST",
         body: JSON.stringify({ username, password }),
         headers: {

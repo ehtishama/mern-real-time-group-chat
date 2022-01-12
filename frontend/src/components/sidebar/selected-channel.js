@@ -12,7 +12,7 @@ export default function SelectedChannel({ channel, members }) {
         <>
             {/* heading */}
             <div
-                className={`flex items-center gap-3 h-12 shadow shadow-black px-${padding}`}
+                className={`flex-shrink-0 flex items-center gap-3 h-12 shadow shadow-black px-${padding}`}
             >
                 <button
                     className="h-6 w-6 rounded bg-dark-200 hover:bg-dark-hover flex items-center justify-center font-bold"
@@ -23,7 +23,7 @@ export default function SelectedChannel({ channel, members }) {
                 <h2 className="font-medium">All channels</h2>
             </div>
             {/* Selected channel info */}
-            <div className={`px-${padding} space-y-8`}>
+            <div className={`px-${padding} space-y-8 mt-6`}>
                 <div className="space-y-2">
                     <h2 className={"font-medium uppercase"}>{channel.name}</h2>
                     <p className={"text-sm text-gray-400"}>{channel.summary}</p>

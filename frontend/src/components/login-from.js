@@ -39,7 +39,11 @@ export default function LoginForm() {
                     new Promise((res) => setTimeout(() => res(resp), 2000))
             )
             .then(setUser)
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                console.log(err);
+                alert(err.message)
+            })
+            // .then(alert);
     };
 
     return (
@@ -47,7 +51,7 @@ export default function LoginForm() {
             {loginSuccess ? (
                 <InfiniteProgress />
             ) : (
-                <div className="text-white bg-dark-200 px-12 py-16 rounded-lg shadow w-[500px]">
+                <div className="text-white bg-dark-200 px-12 py-16 rounded-2xl shadow md:w-[500px] mx-4">
                     <h2 className=" text-center text-3xl mb-6">Login</h2>
 
                     <div>
@@ -71,8 +75,8 @@ export default function LoginForm() {
                                     "border border-red-800 shadow shadow-red-800"
                                 }`}
                                 value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    autoComplete="current-password"
+                                onChange={(e) => setPassword(e.target.value)}
+                                autoComplete="current-password"
                                 required
                             />
                             {loginError && (
@@ -85,7 +89,9 @@ export default function LoginForm() {
                                 disabled={loading}
                             >
                                 {loading ? (
-                                    <LoadingIcons />
+                                    <span className="animate-spin">
+                                        <LoadingIcons />
+                                    </span>
                                 ) : (
                                     <span>Login</span>
                                 )}

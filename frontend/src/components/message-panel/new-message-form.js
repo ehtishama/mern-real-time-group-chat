@@ -16,7 +16,7 @@ export default function NewMessageForm({ channelId, onNewMessage }) {
             author: { ...user },
             content: message,
             channel: channelId,
-            created_at: Date.now(),
+            createdAt: Date.now(),
         };
 
         onNewMessage(newMessage);
@@ -24,7 +24,7 @@ export default function NewMessageForm({ channelId, onNewMessage }) {
     };
 
     return (
-        <div className="my-6 px-12">
+        <div className="my-6 px-4 md:px-12">
             <div className="px-3 py-1 pr-1 shadow rounded-lg bg-dark-input">
                 <form onSubmit={handleSubmit}>
                     <div className="flex items-center">

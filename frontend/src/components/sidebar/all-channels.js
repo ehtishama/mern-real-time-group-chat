@@ -2,14 +2,11 @@ import PlusIcon from "../../icons/plus";
 import SearchIcon from "../../icons/search";
 import Channel from "./channel";
 
-export function AllChannels({
-    handleCreateBtnClick,
-    channels,
-}) {
+export function AllChannels({ handleCreateBtnClick, channels }) {
     return (
         <>
             {/* heading */}
-            <div className="flex justify-between items-center h-12 shadow shadow-black px-8">
+            <div className="flex justify-between items-center h-12 flex-shrink-0 shadow shadow-black px-8">
                 <h2 className="font-medium">Channels</h2>
                 <button
                     className="h-6 w-6 rounded bg-dark-200 hover:bg-dark-hover flex items-center justify-center font-bold"
