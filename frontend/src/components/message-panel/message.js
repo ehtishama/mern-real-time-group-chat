@@ -1,4 +1,5 @@
 import { generateAvatar } from "../../helpers/profile";
+import { formatRelative, formatDistance, formatDistanceToNow } from "date-fns";
 
 export default function Message({ className, message }) {
     return (
@@ -13,7 +14,12 @@ export default function Message({ className, message }) {
             <div>
                 <div className="flex gap-2 items-center text-gray-400">
                     <h3 className="text font-medium">{`${message.author.firstname} ${message.author.lastname}`}</h3>
-                    <p className="text-xs">yesterday at 14:02</p>
+                    <p className="text-xs">
+                        {formatRelative(
+                            new Date(message.createdAt),
+                            new Date()
+                        )}
+                    </p>
                 </div>
 
                 <p className="text-sm">{message.content}</p>

@@ -42,7 +42,7 @@ export default function Sidebar({
     }, [channelId, isMember, setErrors]);
 
     return (
-        <div className="shrink-0 text-gray-50 h-screen w-72 bg-dark-100 space-y-4 flex flex-col">
+        <div className="sidebar shrink-0 text-gray-50 h-screen w-72 bg-dark-100 space-y-4 flex flex-col">
             {!channelId ? (
                 <AllChannels
                     channels={channels}

@@ -32,3 +32,28 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* SCROLLBAR CUSTOMIZATION */
+
+/* Chrome */
+.overflow-auto::-webkit-scrollbar {
+  width: 3px;
+}
+.overflow-auto:hover::-webkit-scrollbar{
+  width: 6px;
+}
+
+.overflow-auto::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+.overflow-auto::-webkit-scrollbar-thumb {
+  @apply bg-gray-500 rounded;
+}
+
+/* Firefox */
+.overflow-auto {
+  scrollbar-width: thin;
+  scrollbar-color: #444 transparent;
+  
+}
