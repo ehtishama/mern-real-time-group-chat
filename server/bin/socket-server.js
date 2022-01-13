@@ -6,7 +6,7 @@ const socketio = require("socket.io");
 const store = new Map();
 const socketServer = new socketio.Server({
     cors: {
-        origin: "http://localhost:3001",
+        origin: "*",
     },
 });
 

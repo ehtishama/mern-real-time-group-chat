@@ -16,7 +16,7 @@ export function ApiErrorHolder() {
     ));
 
     return createPortal(
-        <div className="absolute top-0 right-0 w-[400px] p-3 space-y-2">
+        <div className="absolute top-0 right-0 w-[400px] space-y-2">
             {errorPopups}
         </div>,
         document.getElementById("popups")

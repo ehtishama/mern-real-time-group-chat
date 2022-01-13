@@ -9,21 +9,12 @@ import Logout from "./components/logout";
 import { api } from "./lib/axios";
 import { useUser } from "./hooks/useUser";
 import { ApiErrorHolder } from "./components/api-error-holder";
-import { useNetworkStatus } from "./contexts/networkStatusContext";
 import NetworkStatus from "./components/network-status";
 import Signup from "./pages/signup";
 
 function App() {
     const { user } = useUser();
-
-    if (user && user.token) {
-        api.interceptors.request.use((config) => {
-            config.headers = {
-                authorization: `Bearer ${user.token}`,
-            };
-            return config;
-        });
-    }
+    api.defaults.headers.common["authorization"] = `Bearer ${user?.token}`;
 
     return (
         <BrowserRouter>

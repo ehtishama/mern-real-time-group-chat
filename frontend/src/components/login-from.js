@@ -41,9 +41,9 @@ export default function LoginForm() {
             .then(setUser)
             .catch((err) => {
                 console.log(err);
-                alert(err.message)
-            })
-            // .then(alert);
+                alert(err.message);
+            });
+        // .then(alert);
     };
 
     return (
@@ -65,6 +65,7 @@ export default function LoginForm() {
                                 }`}
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
+                                autoComplete="username"
                                 required
                             />
                             <input
