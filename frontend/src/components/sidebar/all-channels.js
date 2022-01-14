@@ -2,7 +2,20 @@ import PlusIcon from "../../icons/plus";
 import SearchIcon from "../../icons/search";
 import Channel from "./channel";
 
-export function AllChannels({ handleCreateBtnClick, channels }) {
+export function AllChannels({
+    handleCreateBtnClick,
+    channels,
+    setFilteredChannels,
+}) {
+    function handleChannelSearch(e) {
+        const query = e.target.value;
+        if (!query) return setFilteredChannels([]);
+        const filteredChannels = channels.filter((channel) =>
+            channel.name.toLowerCase().includes(query.toLowerCase())
+        );
+        return setFilteredChannels(filteredChannels);
+    }
+
     return (
         <>
             {/* heading */}
@@ -23,6 +36,7 @@ export function AllChannels({ handleCreateBtnClick, channels }) {
                         type="text"
                         placeholder="Search"
                         className="bg-dark-input text-sm w-full rounded-md p-2 pl-8 placeholder:text-gray-200"
+                        onChange={handleChannelSearch}
                     />
                 </div>
             </div>

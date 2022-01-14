@@ -13,6 +13,7 @@ export default function Sidebar({
     channel,
     isMember,
     addNewChannel,
+    setFilteredChannels
 }) {
     const { channelId } = useParams();
     const { setErrors } = useApiErrors();
@@ -55,6 +56,7 @@ export default function Sidebar({
                     <AllChannels
                         channels={channels}
                         handleCreateBtnClick={() => setModalOpen((old) => !old)}
+                        setFilteredChannels={setFilteredChannels}
                     />
                 ) : (
                     <SelectedChannel channel={channel} members={members} />

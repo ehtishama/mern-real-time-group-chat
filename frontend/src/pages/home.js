@@ -11,9 +11,16 @@ export default function Home() {
     const { user } = useUser();
 
     const [allChannels, setAllChannels] = useState([]);
+    const [filteredChannels, _setFilteredChannels] = useState([]);
+
     const [selectedChannel, setSelectedChannel] = useState(null);
     const [isMemberOfSelectedChannel, setIsMemberOfSelectedChannel] =
         useState(undefined);
+
+    function setFilteredChannels(channels) {
+        if (channels.length === 0) return _setFilteredChannels(allChannels);
+        return _setFilteredChannels(channels);
+    }
 
     function addNewChannel(newChannel) {
         setAllChannels([...allChannels, newChannel]);
@@ -42,6 +49,11 @@ export default function Home() {
             .then((channels) => setAllChannels(channels))
             .catch((err) => console.log(err));
     }, []);
+
+    // filtered initially equals to allChannels
+    useEffect(() => {
+        _setFilteredChannels(allChannels);
+    }, [allChannels]);
 
     // change selected channel, when channelId changes
     useEffect(() => {
@@ -85,10 +97,11 @@ export default function Home() {
     return (
         <div className="flex">
             <Sidebar
+                channels={filteredChannels}
                 channel={selectedChannel}
-                channels={allChannels}
                 isMember={isMemberOfSelectedChannel}
                 addNewChannel={addNewChannel}
+                setFilteredChannels={setFilteredChannels}
             />
             <MessagePanel
                 channel={selectedChannel}
