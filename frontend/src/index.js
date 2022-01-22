@@ -6,15 +6,19 @@ import reportWebVitals from "./reportWebVitals";
 import { UserProvider } from "./contexts/userContext";
 import { ApiErrorProvider } from "./contexts/apiErrorContext";
 import { NetworkStatusProvider } from "./contexts/networkStatusContext";
+import { Provider } from "react-redux";
+import { store } from "./store";
 ReactDOM.render(
     <React.StrictMode>
-        <NetworkStatusProvider>
-            <ApiErrorProvider>
-                <UserProvider>
-                    <App />
-                </UserProvider>
-            </ApiErrorProvider>
-        </NetworkStatusProvider>
+        <Provider store={store}>
+            <NetworkStatusProvider>
+                <ApiErrorProvider>
+                    <UserProvider>
+                        <App />
+                    </UserProvider>
+                </ApiErrorProvider>
+            </NetworkStatusProvider>
+        </Provider>
     </React.StrictMode>,
     document.getElementById("root")
 );

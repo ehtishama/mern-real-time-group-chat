@@ -5,6 +5,8 @@ import Sidebar from "../components/sidebar";
 import { useUser } from "../hooks/useUser";
 import { socket } from "../lib/socket";
 import { getChannels } from "../services/api";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchChannelsThunk, selectAllChannels } from "../store/channelsSlice";
 
 export default function Home() {
     const { channelId } = useParams();
@@ -16,6 +18,9 @@ export default function Home() {
     const [selectedChannel, setSelectedChannel] = useState(null);
     const [isMemberOfSelectedChannel, setIsMemberOfSelectedChannel] =
         useState(undefined);
+
+    const dispatch = useDispatch();
+    const allChannelsRedux = useSelector(selectAllChannels);
 
     function setFilteredChannels(channels) {
         if (channels.length === 0) return _setFilteredChannels(allChannels);
@@ -48,6 +53,10 @@ export default function Home() {
         getChannels()
             .then((channels) => setAllChannels(channels))
             .catch((err) => console.log(err));
+    }, []);
+
+    useEffect(() => {
+        dispatch(fetchChannelsThunk());
     }, []);
 
     // filtered initially equals to allChannels
@@ -97,7 +106,7 @@ export default function Home() {
     return (
         <div className="flex">
             <Sidebar
-                channels={filteredChannels}
+                channels={allChannelsRedux}
                 channel={selectedChannel}
                 isMember={isMemberOfSelectedChannel}
                 addNewChannel={addNewChannel}

@@ -12,6 +12,7 @@ import { ApiErrorHolder } from "./components/api-error-holder";
 import NetworkStatus from "./components/network-status";
 import Signup from "./pages/signup";
 
+
 function App() {
     const { user } = useUser();
     api.defaults.headers.common["authorization"] = `Bearer ${user?.token}`;
