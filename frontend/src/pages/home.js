@@ -1,86 +1,36 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import MessagePanel from "../components/message-panel";
 import Sidebar from "../components/sidebar";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
 import { socket } from "../lib/socket";
-import { getChannels } from "../services/api";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchChannelsThunk, selectAllChannels } from "../store/channelsSlice";
+import { useDispatch } from "react-redux";
+import { fetchChannelsThunk, setSelectedChannel } from "../store/channelsSlice";
 
 export default function Home() {
-    const { channelId } = useParams();
     const { user } = useUser();
-
-    const [allChannels, setAllChannels] = useState([]);
-    const [filteredChannels, _setFilteredChannels] = useState([]);
-
-    const [selectedChannel, setSelectedChannel] = useState(null);
-    const [isMemberOfSelectedChannel, setIsMemberOfSelectedChannel] =
-        useState(undefined);
-
+    const { channelId } = useParams();
     const dispatch = useDispatch();
-    const allChannelsRedux = useSelector(selectAllChannels);
-
-    function setFilteredChannels(channels) {
-        if (channels.length === 0) return _setFilteredChannels(allChannels);
-        return _setFilteredChannels(channels);
-    }
-
-    function addNewChannel(newChannel) {
-        setAllChannels([...allChannels, newChannel]);
-    }
-
-    function addNewMember(channelId, memberId) {
-        const channel = allChannels.find(
-            (channel) => channel._id === channelId
-        );
-        if (!channel) return;
-        channel.members.push(memberId);
-        const otherChannels = allChannels.filter(
-            (channel) => channel._id !== channelId
-        );
-
-        setAllChannels(
-            [...otherChannels, channel].sort(
-                (a, b) => a.createdAt > b.createdAt
-            )
-        );
-    }
 
     // fetch all channels, only once
     useEffect(() => {
-        getChannels()
-            .then((channels) => setAllChannels(channels))
-            .catch((err) => console.log(err));
-    }, []);
-
-    useEffect(() => {
         dispatch(fetchChannelsThunk());
-    }, []);
-
-    // filtered initially equals to allChannels
-    useEffect(() => {
-        _setFilteredChannels(allChannels);
-    }, [allChannels]);
+    }, [dispatch]);
 
     // change selected channel, when channelId changes
     useEffect(() => {
         if (!channelId) return;
 
-        const selectedChannel = allChannels.find(
-            (channel) => channel._id === channelId
-        );
-        setSelectedChannel(selectedChannel);
+        dispatch(setSelectedChannel(channelId));
 
         return () => {
-            setSelectedChannel(null);
+            dispatch(setSelectedChannel(null));
         };
-    }, [channelId, allChannels]);
+    }, [channelId, dispatch]);
 
     // connect to socket server, every time when channel changes
     useEffect(() => {
-        if (!selectedChannel || !channelId) return;
+        if (!channelId) return;
 
         // connect to web sockets
         socket.auth = { user: user._id, channel: channelId };
@@ -89,35 +39,12 @@ export default function Home() {
         return () => {
             socket.disconnect();
         };
-    }, [selectedChannel, channelId, user._id]);
-
-    // see if the current user is a member of selected channel, run whenever selectedChannelChanges
-    useEffect(() => {
-        if (!selectedChannel) return;
-        if (selectedChannel.members.includes(user._id))
-            setIsMemberOfSelectedChannel(true);
-        else setIsMemberOfSelectedChannel(false);
-
-        return () => {
-            setIsMemberOfSelectedChannel(undefined);
-        };
-    }, [channelId, selectedChannel, user._id]);
+    }, [channelId, user._id]);
 
     return (
         <div className="flex">
-            <Sidebar
-                channels={allChannelsRedux}
-                channel={selectedChannel}
-                isMember={isMemberOfSelectedChannel}
-                addNewChannel={addNewChannel}
-                setFilteredChannels={setFilteredChannels}
-            />
-            <MessagePanel
-                channel={selectedChannel}
-                isMember={isMemberOfSelectedChannel}
-                setIsMember={setIsMemberOfSelectedChannel}
-                addNewMember={addNewMember}
-            />
+            <Sidebar />
+            <MessagePanel />
         </div>
     );
 }

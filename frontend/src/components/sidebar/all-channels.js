@@ -1,19 +1,20 @@
+import { useSelector } from "react-redux";
 import PlusIcon from "../../icons/plus";
 import SearchIcon from "../../icons/search";
+import { selectAllChannels } from "../../store/channelsSlice";
 import Channel from "./channel";
 
-export function AllChannels({
-    handleCreateBtnClick,
-    channels,
-    setFilteredChannels,
-}) {
+export function AllChannels({ handleCreateBtnClick }) {
+    const channels = useSelector(selectAllChannels);
+
     function handleChannelSearch(e) {
-        const query = e.target.value;
-        if (!query) return setFilteredChannels([]);
-        const filteredChannels = channels.filter((channel) =>
-            channel.name.toLowerCase().includes(query.toLowerCase())
-        );
-        return setFilteredChannels(filteredChannels);
+        // const query = e.target.value;
+        // TODO :: update following to use redux
+        // if (!query) return setFilteredChannels([]);
+        // const filteredChannels = channels.filter((channel) =>
+        //     channel.name.toLowerCase().includes(query.toLowerCase())
+        // );
+        // return setFilteredChannels(filteredChannels);
     }
 
     return (

@@ -1,12 +1,14 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createNewChannel } from "../../services/api";
+import { addChannel } from "../../store/channelsSlice";
 
-
-export default function Modal({ open, setOpen, addNewChannel }) {
+export default function Modal({ open, setOpen }) {
     const [channelName, setChannelName] = useState("");
     const [channelSummary, setChannelSummary] = useState("");
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -14,9 +16,9 @@ export default function Modal({ open, setOpen, addNewChannel }) {
         const newChannel = { name: channelName, summary: channelSummary };
         try {
             const channel = await createNewChannel(newChannel);
-            addNewChannel(channel);
+            dispatch(addChannel(channel));
             setOpen(false);
-            navigate("/channels/" + channel._id)
+            navigate("/channels/" + channel._id);
         } catch (e) {
             console.error(e);
         }

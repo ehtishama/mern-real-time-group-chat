@@ -1,20 +1,24 @@
 import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { useUser } from "../../hooks/useUser";
 import { socket } from "../../lib/socket";
 import { getMessages, postMessage } from "../../services/api";
+import { selectChannelById, selectIsMember } from "../../store/channelsSlice";
 import InfiniteProgress from "../infinite-progress";
 import JoinChannel from "../join-channel";
 import AllMessages from "./all-messages";
 import NewMessageForm from "./new-message-form";
 
-export default function MessagePanel({
-    channel,
-    isMember,
-    setIsMember,
-    addNewMember,
-}) {
+export default function MessagePanel() {
     const { user } = useUser();
-    const channelId = channel?._id;
+
+    const { channelId } = useParams();
+    
+    const channel = useSelector((state) => selectChannelById(state, channelId));
+    const isMember = useSelector((state) =>
+        selectIsMember(state, user._id, channelId)
+    );
 
     const [messages, setMessages] = useState([]);
     const [loadingMessages, setLoadingMessages] = useState(false);
@@ -79,11 +83,7 @@ export default function MessagePanel({
                 <div className="overflow-auto" style={{ flexGrow: 1 }}>
                     {isMember === undefined ? null : isMember === false ? (
                         <div className="w-full">
-                            <JoinChannel
-                                channel={channel}
-                                setIsMember={setIsMember}
-                                addNewMember={addNewMember}
-                            />
+                            <JoinChannel channel={channel} />
                         </div>
                     ) : (
                         <div>

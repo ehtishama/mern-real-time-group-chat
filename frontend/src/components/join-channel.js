@@ -1,13 +1,20 @@
+import { useDispatch } from "react-redux";
 import { useUser } from "../hooks/useUser";
 import { joinChannel } from "../services/api";
+import { addMember } from "../store/channelsSlice";
 
-export default function JoinChannel({ channel, setIsMember, addNewMember }) {
+export default function JoinChannel({
+    channel    
+}) {
     const { user } = useUser();
+    const dispatch = useDispatch();
+
     const handleJoinChannelClick = async () => {
         try {
             await joinChannel(channel._id, user);
-            setIsMember(true);
-            addNewMember(channel._id, user._id);
+            dispatch(
+                addMember({ channelId: channel._id, newMember: user._id })
+            );
         } catch (e) {
             console.log(e);
         }
