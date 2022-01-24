@@ -6,7 +6,7 @@ import Channel from "./channel";
 
 export function AllChannels({ handleCreateBtnClick }) {
     const channels = useSelector(selectAllChannels);
-
+    
     function handleChannelSearch(e) {
         // const query = e.target.value;
         // TODO :: update following to use redux

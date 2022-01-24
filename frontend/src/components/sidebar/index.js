@@ -7,13 +7,16 @@ import { useParams } from "react-router-dom";
 import { useApiErrors } from "../../contexts/apiErrorContext";
 import Profile from "./profile";
 import HamMenu from "../../icons/ham-menu";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectChannelById, selectIsMember } from "../../store/channelsSlice";
 import { useUser } from "../../hooks/useUser";
+import {
+    fetchMembersThunk,
+    selectChannelMembers,
+} from "../../store/membersSlice";
 
 export default function Sidebar() {
     const { channelId } = useParams();
-    const { setErrors } = useApiErrors();
     const {
         user: { _id: userId },
     } = useUser();
@@ -21,32 +24,20 @@ export default function Sidebar() {
     const isMember = useSelector((state) =>
         selectIsMember(state, userId, channelId)
     );
+    const members =
+        useSelector((state) => selectChannelMembers(state, channelId)) || [];
+    const dispatch = useDispatch();
 
     // UI state
     const [modalOpen, setModalOpen] = useState(false);
     const [showSidebar, setShowSidebar] = useState(false);
 
-    // content state
-    const [members, setMembers] = useState([]);
-
     // fetch member of selected channel
     useEffect(() => {
         if (!channelId || !isMember) return;
 
-        getMembers(channelId)
-            .then(setMembers)
-            .catch((err) => {
-                const {
-                    response: {
-                        data: { message, status },
-                    },
-                } = err;
-
-                const key = Date.now();
-                setErrors((errors) => [...errors, { key, message, status }]);
-            });
-        return () => setMembers([]);
-    }, [channelId, isMember, setErrors]);
+        if (members.length === 0) dispatch(fetchMembersThunk({ channelId }));
+    }, [channelId, isMember, dispatch]);
 
     return (
         <div

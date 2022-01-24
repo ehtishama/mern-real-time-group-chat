@@ -1,6 +1,5 @@
 const passport = require("passport");
 const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
-const jsonWebToken = require("jsonwebtoken");
 const config = require("../config");
 
 const User = require("../models/User");

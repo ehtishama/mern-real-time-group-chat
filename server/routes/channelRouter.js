@@ -13,9 +13,10 @@ channelRouter
     .all(verifyUser())
     .get(async (req, res, next) => {
         try {
-            const channels = await Channel.find({});
+            let channels = await Channel.find({});
             res.json(channels);
         } catch (err) {
+            console.log(err.message);
             next(err);
         }
     })
@@ -27,7 +28,7 @@ channelRouter
             const channel = await Channel.create({
                 ...req.body,
                 created_by: req.user._id,
-                members: [req.user._id]
+                members: [req.user._id],
             });
             res.json(channel);
         } catch (err) {
