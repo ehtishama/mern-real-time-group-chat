@@ -1,10 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useUser } from "../../hooks/useUser";
 import { socket } from "../../lib/socket";
 import { getMessages, postMessage } from "../../services/api";
 import { selectChannelById, selectIsMember } from "../../store/channelsSlice";
+import {
+    addOneMessage,
+    fetchMessagesThunk,
+    selectAllMessages,
+    selectMessagesStatus,
+} from "../../store/messagesSlice";
 import InfiniteProgress from "../infinite-progress";
 import JoinChannel from "../join-channel";
 import AllMessages from "./all-messages";
@@ -12,27 +18,31 @@ import NewMessageForm from "./new-message-form";
 
 export default function MessagePanel() {
     const { user } = useUser();
-
     const { channelId } = useParams();
-    
+
     const channel = useSelector((state) => selectChannelById(state, channelId));
     const isMember = useSelector((state) =>
         selectIsMember(state, user._id, channelId)
     );
 
-    const [messages, setMessages] = useState([]);
-    const [loadingMessages, setLoadingMessages] = useState(false);
+    const dispatch = useDispatch();
+    const loadingMessages = useSelector(
+        (state) => selectMessagesStatus(state) === "loading"
+    );
+    const messages =
+        useSelector((state) => selectAllMessages(state, channelId)) || [];
 
     const emptyDiv = useRef();
 
     async function addNewMessage(message) {
-        setMessages([...messages, message]);
+        dispatch(addOneMessage({ channelId, message }));
         try {
             await postMessage(channelId, message.content);
         } catch (error) {
             console.log(error);
         }
     }
+
     function scrollToBottom() {
         emptyDiv.current?.scrollIntoView({ behavior: "smooth" });
     }
@@ -44,30 +54,16 @@ export default function MessagePanel() {
                 payload.channel === channelId &&
                 payload.author._id !== user._id
             ) {
-                setMessages((messages) => [...messages, payload]);
+                dispatch(addOneMessage({ channelId, message: payload }));
             }
         });
-
         return () => socket.removeListener("new_message");
-    }, [channelId, user._id]);
+    }, [channelId, user._id, dispatch]);
 
     useEffect(() => {
         if (!channelId || !isMember) return;
-        setLoadingMessages(true);
-        getMessages(channelId)
-            .then(
-                (resp) =>
-                    new Promise((resolve) =>
-                        setTimeout(() => resolve(resp), 2000)
-                    )
-            )
-            .then((messages) => {
-                setMessages(messages);
-                setLoadingMessages(false);
-            })
-            .catch(console.log);
-        return () => setMessages([]);
-    }, [channelId, isMember]);
+        dispatch(fetchMessagesThunk({ channelId }));
+    }, [channelId, isMember, dispatch]);
 
     useEffect(() => {
         scrollToBottom();
