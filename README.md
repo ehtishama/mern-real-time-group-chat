@@ -1,28 +1,4 @@
-<!-- Please update value in the {}  -->
-
-<h1 align="center">MERN Group Chat with Socket.io</h1>
-
-<!-- <div align="center">
-   Solution for a challenge from  <a href="http://devchallenges.io" target="_blank">Devchallenges.io</a>.
-</div> -->
-
-<!-- <div align="center">
-  <h3>
-    <a href="https://{your-demo-link.your-domain}">
-      Demo
-    </a>
-    <span> | </span>
-    <a href="https://{your-url-to-the-solution}">
-      Solution
-    </a>
-    <span> | </span>
-    <a href="https://devchallenges.io/challenges/UgCqszKR7Q7oqb4kRfI0">
-      Challenge
-    </a>
-  </h3>
-</div> -->
-
-<!-- TABLE OF CONTENTS -->
+<h1 align="center">Group Chat</h1>
 
 ## Table of Contents
 
@@ -31,7 +7,6 @@
 - [Features](#features)
 - [How to use](#how-to-use)
 - [Contact](#contact)
-- [Acknowledgements](#acknowledgements)
 
 <!-- OVERVIEW -->
 
@@ -39,29 +14,27 @@
 
 ![screenshot](Screenshot-1.png)
 
-MERN Group Chat is a real time group chat webapp built using modern web technologies and frameworks.
-
-- Where can I see your demo?
-- What was your experience?
-- What have you learned/improved?
-- Your wisdom? :)
+Group Chat is a real time group chat webapp built using modern web technologies. I did this project while learning, Full stack Web Development with Javascript. The design of this project is from one of the challenges at devchallenges.io. This project also completes all of the user stories of this challenge. 
 
 ### Built With
 
 <!-- This section should list any major frameworks that you built your project using. Here are a few examples.-->
 
-- [Express](https://reactjs.org/)
-- [MongoDB](https://reactjs.org/)
-- [Socket.io](https://reactjs.org/)
+- [Express](https://expressjs.com/)
+- [Mongoose](https://mongoosejs.com/)
+- [Socket.io](https://socket.io/)
 - [React](https://reactjs.org/)
-- [Redux](https://reactjs.org/)
+- [Redux](https://redux.js.org/)
 - [Tailwind](https://tailwindcss.com/)
 
 ## Features
 
 <!-- List the features of your application or follow the template. Don't share the figma file here :) -->
+- RESTful API with Express
+- API Authentication and Authorization
+- Realtime messages using Socket.io
+- Responsive Design
 
-This application/site was created as a submission to a [DevChallenges](https://devchallenges.io/challenges) challenge. The [challenge](https://devchallenges.io/challenges/UgCqszKR7Q7oqb4kRfI0) was to build an application to complete the given user stories.
 
 ## How To Use
 
@@ -81,12 +54,15 @@ $ npm install
 $ cd frontend
 $ npm install
 
+# goto `server/config/index.js` and update the MONGO_URL constant
+
 # Run the server
 $ cd server
 $ npm start
 
+# goto `frontend/src/constants/api.js` and update `BASE_URL` to match the server path, and then
+
 # Run the frontend client
-- goto frontend/src/constants/api.js and update `BASE_URL` to match the server path, and then run
 $ cd frontend
 $ npm start
 ```
